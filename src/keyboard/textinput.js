@@ -512,7 +512,11 @@ TextInput= function(parentNode, host) {
         }
     };
 
-    event.addCommandKeyListener(text, host.onCommandKey.bind(host), host);
+    event.addCommandKeyListener(text, function(e, hashId, keyCode) {
+        if (inComposition && !hashId && (e.key == "Backspace" || e.key == "Delete"))
+            return;
+        return host.onCommandKey(e, hashId, keyCode);
+    }, host);
 
     event.addListener(text, "select", onSelect, host);
     event.addListener(text, "input", onInput, host);
